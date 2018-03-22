@@ -326,7 +326,7 @@ def getBigRefGene(vcf, format='vcf', tmpextin='.1', tmpextout='.2', sep='\t'):
     inds=getFormatSpecificIndices(format=format)
     fh = open(vcf)
 
-    ##CHROM	POS	ID	REF	ALT
+    ##CHROM POS ID  REF ALT
     conn = sql_config.conn2annotator()
     cursor = conn.cursor ()
     vcf_linenum = 1
@@ -486,8 +486,8 @@ def getGenes(vcf, format='vcf', table='refGene', promoter_offset=500, tmpextin='
                     cdsStart = int(row[6])
                     cdsEnd = int(row[7])
                     exonCount = int(row[8])
-                    exonStarts =str(row[9])
-                    exonEnds = str(row[10])
+                    exonStarts =str(row[9].decode("utf-8"))
+                    exonEnds = str(row[10].decode("utf-8"))
                     geneSymbol = str(row[12])
                     strand = str(row[3])
 
@@ -659,8 +659,8 @@ def getExonsEtAl(vcf, format='vcf', table='refGene', promoter_offset=500, tmpext
                     cdsStart = int(row[6])
                     cdsEnd = int(row[7])
                     exonCount = int(row[8])
-                    exonStarts =str(row[9])
-                    exonEnds = str(row[10])
+                    exonStarts =str(row[9].decode('utf-8'))
+                    exonEnds = str(row[10].decode('utf-8'))
                     geneSymbol = str(row[12])
                     strand = str(row[3])
 

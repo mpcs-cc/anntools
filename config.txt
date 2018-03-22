@@ -1,6 +1,8 @@
 ##
 # Specify in this order (one parameter per line):
 # host, user, password, database, port
+# Please do not modify - the values are set to access
+# a shared database owned by another AWS account
 ##
 
 <database_hostname>

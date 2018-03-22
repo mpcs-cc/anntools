@@ -32,7 +32,8 @@
 #
 ################################################################################
 
-import MySQLdb
+#import MySQLdb
+import pymysql
 import file_utils as fu
 import file_utils as fu
 
@@ -55,5 +56,6 @@ db = config[3]
 port = int(config[4])
 
 def conn2annotator():
-    conn = MySQLdb.connect (host = host, user = user, passwd = passwd, db = db, port = port)
+    #conn = MySQLdb.connect (host = host, user = user, passwd = passwd, db = db, port = port)
+    conn = pymysql.connect (host = host, user = user, passwd = passwd, db = db, port = port)
     return conn
