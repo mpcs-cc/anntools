@@ -30,6 +30,44 @@
 #
 ################################################################################
 
+
+import os
+import json
+import pymysql
+import boto3
+from botocore.exceptions import ClientError
+
+"""Get connection to reference database
+"""
+def db_connect():
+    AWS_REGION_NAME = os.environ['AWS_REGION_NAME'] if \
+        ('AWS_REGION_NAME' in  os.environ) else "us-east-1"
+
+    # Get RDS secret from AWS Secrets Manager
+    asm = boto3.client('secretsmanager', region_name=AWS_REGION_NAME)
+    try:
+        asm_response = asm.get_secret_value(SecretId='ads/anntools_database')
+        rds_secret = json.loads(asm_response['SecretString'])
+    except ClientError as e:
+        print(f"Unable to retrieve RDS credentials from AWS Secrets Manager: {e}")
+        raise e
+
+    # Extract database connection parameters
+    rds_host = rds_secret['host']
+    mysql_port = rds_secret['port']
+    username = rds_secret['username']
+    password = rds_secret['password']
+    database_name = 'annotator'
+
+    # Return a connection to the database
+    return pymysql.connect(
+        host=rds_host,
+        port=mysql_port,
+        user=username,
+        passwd=password,
+        db=database_name)
+
+
 """Column inices for pileup and VCF
 """
 def getFormatSpecificIndices(format='vcf'):
@@ -48,7 +86,8 @@ def getFormatSpecificIndices(format='vcf'):
 """Helper method to determine if two regions overlap
 """
 def isOverlap(testStart, testEnd, refStart, refEnd):
-    if (((testStart <= refStart) and (testEnd >= refStart)) or ((testStart >= refStart) and (testStart <= refEnd))):
+    if (((testStart <= refStart) and (testEnd >= refStart)) or \
+        ((testStart >= refStart) and (testStart <= refEnd))):
         return True
     else:
         return False
