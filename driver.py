@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 ################################################################################
 #   Nov 17, 2011
 #   Authors: Vlad Makarov, Chris Yoon
@@ -119,3 +117,5 @@ def run(infile, format):
     os.rename(infile+'.'+str(tmpextin), infile+'.annot')
     finalout=(infile+'.annot').replace('.vcf.annot', '.annot.vcf')
     os.rename(infile+'.annot', finalout)
+
+### EOF

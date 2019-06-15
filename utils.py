@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-
 ################################################################################
 #   Nov 17, 2011
 #   Authors: Vlad Makarov, Chris Yoon
@@ -33,7 +30,8 @@
 #
 ################################################################################
 
-""" Column inices for pileup and VCF"""
+"""Column inices for pileup and VCF
+"""
 def getFormatSpecificIndices(format='vcf'):
     chr_ind = 0
     pos_ind = 1
@@ -46,37 +44,43 @@ def getFormatSpecificIndices(format='vcf'):
 
     return [chr_ind, pos_ind, ref_ind, alt_ind]
 
-""" Helper method to determine if two regions overlap"""
+
+"""Helper method to determine if two regions overlap
+"""
 def isOverlap(testStart, testEnd, refStart, refEnd):
-    if (((testStart <= refStart) and (testEnd >= refStart)) or ((testStart >= refStart) and (testStart <= refEnd))) :
+    if (((testStart <= refStart) and (testEnd >= refStart)) or ((testStart >= refStart) and (testStart <= refEnd))):
         return True
     else:
         return False
 
-""" Overlap between segments """
-def getOverlap(testStart, testEnd, refStart, refEnd):
-    return max(0,  ( min(testEnd, refEnd) - max(testStart, refStart) +1)  )
 
-
-""" Helper method to calculate proportion of a CNV is in the segdup or other region
-    Accepts numeric data, such as integer or float type
+"""Overlap between segments
 """
+def getOverlap(testStart, testEnd, refStart, refEnd):
+    return max(0, (min(testEnd, refEnd) - max(testStart, refStart) + 1))
 
+
+"""Helper method to calculate proportion of a CNV is in the segdup or other region
+Accepts numeric data, such as integer or float type
+"""
 def proportionOverlap(testStart, testEnd, refStart, refEnd):
-    cnvlength=(testEnd - testStart) +1
-    overlaplength=getOverlap(testStart, testEnd, refStart, refEnd)
-    pctover=(float(overlaplength)/cnvlength)*100
+    cnvlength = (testEnd - testStart) + 1
+    overlaplength = getOverlap(testStart, testEnd, refStart, refEnd)
+    pctover = (float(overlaplength)/cnvlength) * 100
     return round(pctover, 2)
 
 
-""" Helper method to determine if the location is within the region"""
+"""Helper method to determine if the location is within the region
+"""
 def isBetween(testStart, refStart, refEnd):
-    if ((refStart<=testStart) and (testStart <= refEnd)) :
+    if ((refStart<=testStart) and (testStart <= refEnd)):
         return True
     else:
         return False
 
-""" Helper method to deduplicate the list"""
+
+"""Helper method to deduplicate the list
+"""
 def dedup(mylist):
     outlist = []
     for element in mylist:
@@ -84,12 +88,15 @@ def dedup(mylist):
             outlist.append(element)
     return outlist
 
-""" Helper method to parse fields """
+
+"""Helper method to parse fields
+"""
 def parse_field(text, key, sep1, sep2):
     fields = text.strip().split(sep1)
     for f in fields:
         pairs = f.split(sep2)
-        #if str(pairs[0]) == str(key):
-        if str(pairs[0]).find(str(key)) > -1:
+        if (str(pairs[0]).find(str(key)) > -1):
             return str(pairs[1])
     return '.'
+
+### EOF

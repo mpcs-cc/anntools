@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 ################################################################################
 #   Nov 17, 2011
 #   Authors: Vlad Makarov, Chris Yoon
@@ -32,30 +30,38 @@
 #
 ################################################################################
 
-#import MySQLdb
+import os
+import json
 import pymysql
-import file_utils as fu
-import file_utils as fu
+import boto3
+from botocore.exceptions import ClientError
 
-def load_config(filename='config.txt'):
-    fh = open(filename, "r")
-    lines = []
+AWS_REGION_NAME = os.environ['AWS_REGION_NAME'] if ('AWS_REGION_NAME' in  os.environ) else "us-east-1"
 
-    for line in fh:
-        line = str(line).strip()
-        if line.startswith('#') == False and len(line) > 0:
-            lines.append(line)
+# Get RDS secret from AWS Secrets Manager
+asm = boto3.client('secretsmanager', region_name=AWS_REGION_NAME)
+try:
+    asm_response = asm.get_secret_value(SecretId='ads/anntools_database')
+    rds_secret = json.loads(asm_response['SecretString'])
+except ClientError as e:
+    print(f"Unable to retrieve RDS credentials from AWS Secrets Manager: {e}")
+    raise e
 
-    return lines
+# Extract database connection parameters
+rds_host = rds_secret['host']
+mysql_port = rds_secret['port']
+username = rds_secret['username']
+password = rds_secret['password']
+database_name = 'annotator'
 
-config=load_config()
-host = config[0]
-user = config[1]
-passwd = config[2]
-db = config[3]
-port = int(config[4])
 
 def conn2annotator():
-    #conn = MySQLdb.connect (host = host, user = user, passwd = passwd, db = db, port = port)
-    conn = pymysql.connect (host = host, user = user, passwd = passwd, db = db, port = port)
-    return conn
+    # Return a connection to the database
+    return pymysql.connect(
+        host=rds_host,
+        port=mysql_port,
+        user=username,
+        passwd=password,
+        db=database_name)
+
+### EOF

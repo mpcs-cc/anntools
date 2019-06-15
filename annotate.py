@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 ################################################################################
 #   Nov 17, 2011
 #   Authors: Vlad Makarov, Chris Yoon
@@ -179,7 +177,6 @@ def getSnpsFromDbSnp(vcf, format='vcf', tmpextin='', tmpextout='.1', varclass='S
             compRef=getComplementary(ref)
             compAlt=getComplementary(alt)
 
-            #sql='select * from dbSNP where CHR="'+ str(chr) + '" AND POS=' + str(pos) + ' AND ( (  REF="'+ str(ref) + '" AND ALT ="'+ str(alt)+'")  OR (REF="'+ str(compRef) + '" AND ALT ="'+ str(compAlt)+'" )) ;'
             sql='select * from dbSNP where CHR="'+ str(chr) + '" AND POS=' + str(pos) + ' AND ( REF="'+ str(ref) + '" OR REF ="'+ str(compRef)+'" )  AND INFO = "'+varclass+'" ;'
             cursor.execute (sql)
             rows = cursor.fetchall ()
@@ -218,8 +215,8 @@ def getSnpsFromDbSnp(vcf, format='vcf', tmpextin='', tmpextout='.1', varclass='S
     ratioInDbSnp = (var_count/float(linenum))*100
     fh_log.write("## Please notice that all Isoforms were counted "+'\n')
     fh_log.write("## Numbers may exceed number of variants in the annotated file"+'\n')
-    fh_log.write("Total: " +str(linenum) +'\n')
-    fh_log.write("In dbSNP: " +str(var_count) + " (" + str(ratioInDbSnp) + "%)" +'\n')
+    fh_log.write(f"Total: {str(linenum)}\n")
+    fh_log.write(f"In dbSNP: {str(var_count)} ({str(ratioInDbSnp)}%)\n")
     fh_log.close()
 
     conn.close()
@@ -267,13 +264,6 @@ def getIndelsFromDbSnp(vcf, format='vcf',  tmpextin='', tmpextout='.1', varclass
                 for row in rows:
                     rsids.append(str(row[3]))
                     vcs.append(str(row[6]))
-                    #refsFromDbSnp=str(row[4]).split(',')
-                    #refsFromVcf=ref.split(',')
-                    #
-                    #altsFromDbSnp=str(row[5]).split(',')
-                    #altsFromVcf=alt.split(',')
-                    #if len(set(refsFromDbSnp).intersection(refsFromVcf)) > 0 and len(set(altsFromDbSnp).intersection(altsFromVcf)) > 0 :
-                    #    rsids.append(str(row[3]))
 
                 if len(rsids)>0:
 
@@ -303,8 +293,8 @@ def getIndelsFromDbSnp(vcf, format='vcf',  tmpextin='', tmpextout='.1', varclass
     ratioInDbSnp = (var_count/float(linenum))*100
     fh_log.write("## Please notice that all Isoforms were counted "+'\n')
     fh_log.write("## Numbers may exceed number of variants in the annotated file"+'\n')
-    fh_log.write("Total: " +str(linenum) +'\n')
-    fh_log.write("In dbSNP: " +str(var_count) + " (" + str(ratioInDbSnp) + "%)" +'\n')
+    fh_log.write(f"Total: {str(linenum)}\n")
+    fh_log.write(f"In dbSNP: {str(var_count)} ({str(ratioInDbSnp)}%)\n")
     fh_log.close()
 
     conn.close()
@@ -516,7 +506,6 @@ def getGenes(vcf, format='vcf', table='refGene', promoter_offset=500, tmpextin='
                                 exnum=e+1
                                 if strand == '-':
                                     exnum =  exonCount - e
-                                #print strand + " exon:"+ str(exnum) +'/'+str(exonCount)
                                 exons.append("exon="+ "ex"+str(exnum) +'/'+str(exonCount))
                                 exonic_count=exonic_count+1
                         if len(exons)>0:
@@ -547,7 +536,6 @@ def getGenes(vcf, format='vcf', table='refGene', promoter_offset=500, tmpextin='
 
 
                     cnt=cnt+1
-                #str_info= ";".join(u.dedup(info))
                 str_info= ";".join(info)
                 fields[7]=fields[7]+';' +str_info
                 fh_out.write('\t'.join(fields)+'\n')
@@ -562,37 +550,35 @@ def getGenes(vcf, format='vcf', table='refGene', promoter_offset=500, tmpextin='
         else:
             fh_out.write(line+'\n')
 
-
-    print ("Variants located: ")
+    print("Variants located: ")
     fh_log.write("Variants located: "+'\n')
 
-    print ("In interGenic " + str(interGenic_count))
-    fh_log.write("In interGenic " + str(interGenic_count) +'\n')
+    print(f"In interGenic {str(interGenic_count)}")
+    fh_log.write(f"In interGenic {str(interGenic_count)}\n")
 
-    print ("In CDS " + str(cds_count))
-    fh_log.write("In CDS " + str(cds_count) +'\n')
+    print(f"In CDS {str(cds_count)}")
+    fh_log.write(f"In CDS {str(cds_count)}\n")
 
-    print ("In \'3 UTR " + str(utr3_count))
-    fh_log.write("In \'3 UTR " + str(utr3_count) +'\n')
+    print(f"In \'3 UTR {str(utr3_count)}")
+    fh_log.write(f"In \'3 UTR {str(utr3_count)}\n")
 
-    print ("In \'5 UTR " + str(utr5_count))
-    fh_log.write("In \'5 UTR " + str(utr5_count) +'\n')
+    print(f"In \'5 UTR {str(utr5_count)}")
+    fh_log.write(f"In \'5 UTR {str(utr5_count)}\n")
 
-    print ("In Intronic "+str(intronic_count))
-    fh_log.write("In Intronic "+str(intronic_count) +'\n')
+    print(f"In Intronic {str(intronic_count)}")
+    fh_log.write(f"In Intronic "+str(intronic_count) +'\n')
 
-    print ("In Non_coding_intronic "+str(non_coding_intronic_count))
-    fh_log.write("In Non_coding_intronic "+str(non_coding_intronic_count) +'\n')
+    print(f"In Non_coding_intronic {str(non_coding_intronic_count)}")
+    fh_log.write(f"In Non_coding_intronic {str(non_coding_intronic_count)}\n")
 
-    print ("In Exonic "+str(exonic_count))
-    fh_log.write("In Exonic "+str(exonic_count) +'\n')
+    print(f"In Exonic {str(exonic_count)}")
+    fh_log.write(f"In Exonic {str(exonic_count)}\n")
 
-    print ("In Non_coding_exonic "+str(non_coding_exonic_count))
-    fh_log.write("In Non_coding_exonic "+str(non_coding_exonic_count) +'\n')
+    print(f"In Non_coding_exonic {str(non_coding_exonic_count)}")
+    fh_log.write(f"In Non_coding_exonic {str(non_coding_exonic_count)}\n")
 
-    print ("In Putative Promoter Region "+str(promoter_count))
-    fh_log.write("In Putative Promoter Region "+str(promoter_count) +'\n')
-
+    print(f"In Putative Promoter Region {str(promoter_count)}")
+    fh_log.write(f"In Putative Promoter Region {str(promoter_count)}\n")
 
     fh_out.close()
     fh_log.close()
@@ -755,39 +741,35 @@ def getExonsEtAl(vcf, format='vcf', table='refGene', promoter_offset=500, tmpext
         else:
             fh_out.write(line+'\n')
 
-
-    print ("Variants located: ")
+    print("Variants located: ")
     fh_log.write("Variants located: "+'\n')
 
-    print ("In interGenic " + str(interGenic_count))
-    fh_log.write("In interGenic " + str(interGenic_count) +'\n')
+    print(f"In interGenic {str(interGenic_count)}")
+    fh_log.write(f"In interGenic {str(interGenic_count)}\n")
 
-    print ("In CDS " + str(cds_count))
-    fh_log.write("In CDS " + str(cds_count) +'\n')
-    #
-    print ("\'3 UTR " + str(utr3_count))
-    fh_log.write("In \'3 UTR " + str(utr3_count) +'\n')
-    #
-    print ("In \'5 UTR " + str(utr5_count))
-    fh_log.write("In \'5 UTR " + str(utr5_count) +'\n')
+    print(f"In CDS {str(cds_count)}")
+    fh_log.write(f"In CDS {str(cds_count)}\n")
 
-    print ("In Intronic "+str(intronic_count))
-    fh_log.write("In Intronic "+str(intronic_count) +'\n')
-    #
-    print ("In Non_coding_intronic "+str(non_coding_intronic_count))
-    fh_log.write("In Non_coding_intronic "+str(non_coding_intronic_count) +'\n')
+    print(f"In \'3 UTR {str(utr3_count)}")
+    fh_log.write(f"In \'3 UTR {str(utr3_count)}\n")
 
-    print ("In Exonic "+str(exonic_count))
-    fh_log.write("In Exonic "+str(exonic_count) +'\n')
+    print(f"In \'5 UTR {str(utr5_count)}")
+    fh_log.write(f"In \'5 UTR {str(utr5_count)}\n")
 
-    print ("In Non_coding_exonic "+str(non_coding_exonic_count))
-    fh_log.write("In Non_coding_exonic "+str(non_coding_exonic_count) +'\n')
+    print(f"In Intronic {str(intronic_count)}")
+    fh_log.write(f"In Intronic "+str(intronic_count) +'\n')
 
-    print ("In Putative Promoter Region "+str(promoter_count))
-    fh_log.write("In Putative Promoter Region "+str(promoter_count) +'\n')
+    print(f"In Non_coding_intronic {str(non_coding_intronic_count)}")
+    fh_log.write(f"In Non_coding_intronic {str(non_coding_intronic_count)}\n")
 
+    print(f"In Exonic {str(exonic_count)}")
+    fh_log.write(f"In Exonic {str(exonic_count)}\n")
 
+    print(f"In Non_coding_exonic {str(non_coding_exonic_count)}")
+    fh_log.write(f"In Non_coding_exonic {str(non_coding_exonic_count)}\n")
 
+    print(f"In Putative Promoter Region {str(promoter_count)}")
+    fh_log.write(f"In Putative Promoter Region {str(promoter_count)}\n")
 
     fh_out.close()
     fh_log.close()
@@ -818,7 +800,6 @@ def addOverlapWithTfbsConsSites(vcf, format='vcf', table='tfbsConsSites', tmpext
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##"):
@@ -841,11 +822,7 @@ def addOverlapWithTfbsConsSites(vcf, format='vcf', table='tfbsConsSites', tmpext
             chrIndex=chr.replace('chr', '')
             if chrIndex in allowed_chrom:
                 isOverlap = False
-                #sql='select chrom, chromStart, chromEnd, name from tfbsConsSites where  chrom="'+ str(chr) + '" AND ((( ' + str(testStart)  + ' <= chromStart) and ( ' + str(testEnd)  + ' >= chromStart)) or ((  ' + str(testStart) + ' >= chromStart ) and (' + str(testStart) + '<= chromEnd)) );'
-                ## chrom is not needed, as one table contains one chromosome
-                #sql='select chrom, chromStart, chromEnd, name from tfbsConsSites' +chrIndex+ ' where  chrom="'+ str(chr) + '" AND (chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd);'
                 sql='select chrom, chromStart, chromEnd, name from tfbsConsSites' +chrIndex+ ' where  chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd;'
-                #print (sql)
                 cursor.execute (sql)
                 rows = cursor.fetchall ()
                 records=[]
@@ -880,8 +857,7 @@ def addOverlapWithTfbsConsSites(vcf, format='vcf', table='tfbsConsSites', tmpext
 
         linenum = linenum +1
 
-
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -909,7 +885,6 @@ def addOverlapWithGadAll(vcf, format='vcf', table='gadAll', tmpextin='', tmpexto
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -927,7 +902,6 @@ def addOverlapWithGadAll(vcf, format='vcf', table='gadAll', tmpextin='', tmpexto
                 isOverlap = False
 
                 sql='select * from ' + table + ' where chromosome="'+ str(chr) +  '" AND (chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd);'
-                #print(sql)
                 cursor.execute (sql)
                 rows = cursor.fetchall ()
                 records=[]
@@ -940,7 +914,6 @@ def addOverlapWithGadAll(vcf, format='vcf', table='gadAll', tmpextin='', tmpexto
                         var_count=var_count+1
                         if fu.isOnTheList(r_tmp, str(row[3]))==False:
                             r_tmp.append(str(row[3]) )
-                            #records.append(str(table)+str(records_count)+':'+str(row[3]))
                             records.append(str(table)+'='+str(row[3]))
                             records_count=records_count+1
                     if str(fields[7]).endswith(';')==True:
@@ -956,7 +929,7 @@ def addOverlapWithGadAll(vcf, format='vcf', table='gadAll', tmpextin='', tmpexto
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -984,7 +957,6 @@ def addOverlapWithGwasCatalog(vcf, format='vcf', table='gwasCatalog', tmpextin='
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -1001,7 +973,6 @@ def addOverlapWithGwasCatalog(vcf, format='vcf', table='gwasCatalog', tmpextin='
                 isOverlap = False
 
                 sql='select * from ' + table + ' where chrom="'+ str(chr) +  '" AND chromEnd = ' + str(pos) + ';'
-                #print(sql)
                 cursor.execute (sql)
                 rows = cursor.fetchall ()
                 records=[]
@@ -1026,7 +997,7 @@ def addOverlapWithGwasCatalog(vcf, format='vcf', table='gwasCatalog', tmpextin='
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -1055,7 +1026,6 @@ def addOverlapWitHUGOGeneNomenclature(vcf, format='vcf', table='hugo', tmpextin=
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -1072,7 +1042,6 @@ def addOverlapWitHUGOGeneNomenclature(vcf, format='vcf', table='hugo', tmpextin=
                 isOverlap = False
 
                 sql='select * from ' + table + ' where chrom="'+ str(chr) +  '" AND (chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd);'
-                #print(sql)
                 cursor.execute (sql)
                 rows = cursor.fetchall ()
                 records=[]
@@ -1105,7 +1074,7 @@ def addOverlapWitHUGOGeneNomenclature(vcf, format='vcf', table='hugo', tmpextin=
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -1157,27 +1126,24 @@ def addOverlapWithGenomicSuperDups(vcf, format='vcf', table='genomicSuperDups', 
                 l=str(isOverlap)
 
                 sql='select * from ' + table + ' where chrom="'+ str(chr) +  '" AND (chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd);'
-                #print(sql)
                 cursor.execute (sql)
                 rows = cursor.fetchone ()
                 if rows is not None:
                     line_count=line_count+1
                     var_count=var_count+1
                     isOverlap=True
-                    #row=rows[0]
                     otherChrom=rows[7]
                     otherStart=rows[8]
                     otherEnd=rows[9]
                     fields[7]=fields[7]+';'+str(table)+'='+str(isOverlap)+';'+'otherChrom='+str(otherChrom)+';otherStart='+str(otherStart)+';otherEnd='+str(otherEnd)
 
                 fh_out.write('\t'.join(fields)+'\n')
-                #print(line+sep+str(isOverlap)+'\n')
 
             linenum = linenum +1
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -1215,7 +1181,6 @@ def addOverlapWithRefGene(vcf, format='vcf', table='refGene', tmpextin='', tmpex
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -1252,7 +1217,7 @@ def addOverlapWithRefGene(vcf, format='vcf', table='refGene', tmpextin='', tmpex
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -1291,7 +1256,6 @@ def addOverlapWithCytoband(vcf, format='vcf', table='cytoBand', tmpextin='', tmp
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -1328,7 +1292,7 @@ def addOverlapWithCytoband(vcf, format='vcf', table='cytoBand', tmpextin='', tmp
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -1355,7 +1319,6 @@ def addOverlapWithCnvDatabase(vcf, format='vcf', table='dgv_Cnv', tmpextin='', t
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -1371,10 +1334,8 @@ def addOverlapWithCnvDatabase(vcf, format='vcf', table='dgv_Cnv', tmpextin='', t
                 pos=fields[inds[1]].strip()
                 isOverlap = False
                 sql='select * from ' + table + ' where chrom="'+ str(chr) +  '" AND (chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd);'
-                #print(sql)
                 cursor.execute (sql)
                 rows = cursor.fetchone ()
-                #correct: 460 - uncomment, 461 comment
                 if rows is not None:
                     line_count=line_count+1
                     var_count=var_count+1
@@ -1390,7 +1351,7 @@ def addOverlapWithCnvDatabase(vcf, format='vcf', table='dgv_Cnv', tmpextin='', t
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -1420,7 +1381,6 @@ def addOverlapWithMiRNA(vcf, format='vcf', table='targetScanS', tmpextin='', tmp
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -1435,10 +1395,8 @@ def addOverlapWithMiRNA(vcf, format='vcf', table='targetScanS', tmpextin='', tmp
                     chr = "chr" + chr
                 pos=fields[inds[1]].strip()
                 sql='select * from ' + table + ' where chrom="'+ str(chr) +  '" AND (chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd);'
-                #print(sql)
                 cursor.execute (sql)
                 rows = cursor.fetchone ()
-                #correct: 460 - uncomment, 461 comment
                 if rows is not None:
                     line_count=line_count+1
                     var_count=var_count+1
@@ -1455,7 +1413,7 @@ def addOverlapWithMiRNA(vcf, format='vcf', table='targetScanS', tmpextin='', tmp
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In miRNAsites: " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In miRNAsites: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
@@ -1486,7 +1444,6 @@ def addOverlapWithPutativePromoter(vcf, format='vcf', table='putativePromoter', 
     linenum = 1
 
     for line in fh:
-        #print ('Line ' + str(linenum))
         line = line.strip()
         ## not comments
         if line.startswith("##")==False:
@@ -1501,10 +1458,8 @@ def addOverlapWithPutativePromoter(vcf, format='vcf', table='putativePromoter', 
                     chr = "chr" + chr
                 pos=fields[inds[1]].strip()
                 sql='select * from ' + table + ' where chrom="'+ str(chr) +  '" AND (chromStart <= ' + str(pos) + ' AND ' + str(pos) + ' <= chromEnd);'
-                #print(sql)
                 cursor.execute (sql)
                 rows = cursor.fetchone ()
-                #correct: 460 - uncomment, 461 comment
                 if rows is not None:
                     line_count=line_count+1
                     var_count=var_count+1
@@ -1521,9 +1476,11 @@ def addOverlapWithPutativePromoter(vcf, format='vcf', table='putativePromoter', 
         else:
             fh_out.write(line+'\n')
 
-    fh_log.write("In "+ str(table) + ": " +str(var_count) +' in ' + str(line_count) + ' variants\n')
+    fh_log.write(f"In {str(table)}: {str(var_count)} in {str(line_count)} variants\n")
     fh_log.close()
 
     conn.close()
     fh.close()
     fh_out.close()
+
+### EOF

@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-
 ################################################################################
 #   Nov 17, 2011
 #   Authors: Vlad Makarov, Chris Yoon
@@ -37,11 +34,11 @@ import os
 import datetime
 import file_utils as fu
 
-
 HETERO = {'M':'AC', 'R':'AG', 'W':'AT', 'S':'CG', 'Y':'CT', 'K':'GT'}
-ACCEPTED_CHR = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20","21","22", "X", "Y", "MT"]
-#ACCEPTED_CHR = ["X"]
+ACCEPTED_CHR = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", 
+                "14", "15", "16", "17", "18", "19", "20","21","22", "X", "Y", "MT"]
 #http://www.broadinstitute.org/gsa/wiki/index.php/Understanding_the_Unified_Genotyper's_VCF_files
+
 def count_alt(depth, bases):
     bases = bases.upper()
     lst = list(bases)
@@ -119,6 +116,7 @@ def varpileup_line2vcf_line(pileupfields):
     # 6 - root mean square (RMS) mapping quality
     return chr+t+pos+t+'.' +t+ ref +t+ alt +t+ mapqual +t+ 'PASS' +t+ '.' + t + 'GT:GQ:DP:AD'+t+GT+':'+consqual+':'+depth+':'+alt_count
 
+
 def filter_pileup(pileup, outfile=None, chr_col=0, ref_col=2, alt_col=3, sep='\t'):
 
 
@@ -144,10 +142,9 @@ def filter_pileup(pileup, outfile=None, chr_col=0, ref_col=2, alt_col=3, sep='\t
             fh_out.write(varpileup_line2vcf_line(fields[0:9]) +'\n' )
 
 
-
-
+"""Removes lines where ALT==REF and chromosomes other than 1 - 22, X, Y and MT
+"""
 def filter_vcf(pileup, outfile=None,  chr_col=0, ref_col=3, alt_col=4, sep='\t'):
-    """ Removes lines where ALT==REF and chromosomes other than 1 - 22, X, Y and MT"""
 
     fh = open(pileup, "r")
     if outfile is None:
@@ -171,3 +168,5 @@ def filter_vcf(pileup, outfile=None,  chr_col=0, ref_col=3, alt_col=4, sep='\t')
 
                 if (alt != ref) and (fu.find_first_index(ACCEPTED_CHR, chr.strip()) > -1):
                     fh_out.write(str(line)+'\n')
+
+### EOF

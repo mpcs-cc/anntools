@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 ################################################################################
 #   Nov 17, 2011
 #   Authors: Vlad Makarov, Chris Yoon
@@ -41,14 +39,16 @@ import sys
 
 import itertools, operator
 
-"""Execute command """
+"""Execute command
+"""
 def execute(com, debug=False):
     if debug==True:
         print (com)
     os.system(com)
 
 
-""" Linear search, returns first index """
+"""Linear search, returns first index
+"""
 def find_first_index(lst, elem):
     ind = 0
     for l in lst:
@@ -58,36 +58,42 @@ def find_first_index(lst, elem):
 
     return -1
 
-""" returns True or False """
 
+"""Returns True or False 
+"""
 def isOnTheList(theList, theElement):
     theList=map(str, theList)
     return str(theElement) in theList
 
-""" Removes NA """
+
+"""Removes NA
+"""
 def rmNA(intstr):
     if intstr == 'NA' or intstr == 'NaN':
         return 0
     else:
         return int(float(intstr))
 
-## {{{ http://code.activestate.com/recipes/65441/ (r2)
+
+"""Check whether 'str' contains ANY of the chars in 'set'
+"""
 def containsAny(str, set):
-    """Check whether 'str' contains ANY of the chars in 'set'"""
     return 1 in [c in str for c in set]
 
-def containsAll(str, set):
-    """Check whether 'str' contains ALL of the chars in 'set'"""
-    return 0 not in [c in str for c in set]
 
-## end of http://code.activestate.com/recipes/65441/ }}}
+"""Check whether 'str' contains ALL of the chars in 'set'
+"""
+def containsAll(str, set):
+    return 0 not in [c in str for c in set]
 
 
 def contains(theString, theQueryValue):
   return theString.find(theQueryValue) > -1
 
+
 def str2bool(v):
   return v.lower() in ["y", "yes", "true", "t", "1"]
+
 
 def isExist(filename):
     if os.path.exists(filename) and os.path.isfile(filename):
@@ -95,31 +101,37 @@ def isExist(filename):
     else:
         return False
 
+
 def fileSize(filename):
     return int(os.path.getsize(filename))
+
 
 def delete(filename):
     if os.path.exists(filename) and os.path.isfile(filename):
         os.unlink(filename)
 
+
+"""Makes directory if it does not exist
+"""
 def mkdirp(directory):
-    """ makes directory if it does not exist
-    """
     if not os.path.isdir(directory):
         os.makedirs(directory)
 
+
+"""Extracts column specified by column index
+   Assumes that first row as a header
+"""
 def get_column(path, c=0, r=1, sep='\t'):
-    """ extracts column specified by column index
-        assumes that first row as a header
-    """
     try:
         reader = csv.reader(open(path, "r"), delimiter=sep)
         return [row[c] for row in reader] [r :]
     except IOError:
-        print('list_rows: file "'+path +'" does not exist')
+        print(f"list_rows: file '{path}' does not exist")
         return 'list_rows failed'
 
-""" load the file as a list of strings lines"""
+
+"""Load the file as a list of strings lines
+"""
 def loadFile(filename):
     fh = open(filename, "r")
     lines = []
@@ -130,7 +142,10 @@ def loadFile(filename):
     return lines
 
 
-""" Loads CNV table. By default first row (zero based) is a header and pound sign is a comment character """
+"""Loads CNV table
+   By default first row (zero based) is a header and
+   pound sign is a comment character
+"""
 def loadTable(filename, headerrow=0, commentchar='#'):
     fh = open(filename, "r")
     lines = []
@@ -143,16 +158,16 @@ def loadTable(filename, headerrow=0, commentchar='#'):
     return lines
 
 
-
+"""Extracts column specified by column index
+   Assumes that first row as a header
+"""
 def get_int_column(path, c=0, r=1, sep='\t'):
-    """ extracts column specified by column index
-        assumes that first row as a header
-    """
+
     try:
         reader = csv.reader(open(path, "r"), delimiter=sep)
         return [int(row[c]) for row in reader] [r :]
     except IOError:
-        print('list_rows: file "'+path +'" does not exist')
+        print(f"list_rows: file '{path}' does not exist")
         return 'list_rows failed'
 
 def read_one_int_col(filename):
@@ -182,7 +197,7 @@ def get_index_of_col_or_row(lst, value):
     try:
         return lst.index(value)
     except:
-        print('get_index_of_col_or_row: value not found "' + value + '"')
+        print(f"get_index_of_col_or_row: value not found '{value}'")
         return -1
 
 def array2str(array, sep='\t'):
@@ -216,7 +231,8 @@ def readindices(filename, sep='\t'):
     return sorted(values)
 
 
-"""" Count number of lines in file, file is not loaded to memory"""
+""""Count number of lines in file, file is not loaded to memory
+"""
 def linecount(filename):
     fh = open(filename, "r")
     linenum=0
@@ -225,10 +241,9 @@ def linecount(filename):
     return linenum
 
 
+"""Saves list of rows and columns in a text file
+"""
 def save2txt(read_data, txtfile, compress=False, debug=True):
-    """
-    Saves list of rows and columns in a text file
-    """
     try:
         f=open(txtfile, 'w')
         tmp = array2str(array=read_data, sep='\n')
@@ -238,7 +253,9 @@ def save2txt(read_data, txtfile, compress=False, debug=True):
         if debug==True:
             print ("Written " + str(txtfile) )
     except IOError:
-        print('save2txt: can not write to file "' + file)
+        print(f"save2txt: can not write to file '{file}'")
         return 'save_list_of_str failed'
     finally:
         f.close()
+
+### EOF

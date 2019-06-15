@@ -1,5 +1,10 @@
-# Copyright (C) 2011-2018 Vas Vasiliadis
+# run.py
+#
+# Copyright (C) 2011-2019 Vas Vasiliadis
 # University of Chicago
+#
+# Wrapper script for running AnnTools
+#
 ##
 __author__ = 'Vas Vasiliadis <vas@uchicago.edu>'
 
@@ -30,3 +35,5 @@ if __name__ == '__main__':
 			driver.run(sys.argv[1], 'vcf')
 	else:
 		print("A valid .vcf file must be provided as input to this program.")
+
+### EOF
