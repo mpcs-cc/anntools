@@ -709,7 +709,6 @@ def getExonsEtAl(vcf, format='vcf', table='refGene', promoter_offset=500,
     fh_out.close()
     fh_log.close()
     fh.close()
-    conn.close()
 
 
 """Overlap with tfbsConsSites
