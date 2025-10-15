@@ -1,6 +1,6 @@
 # run.py
 #
-# Copyright (C) 2011-2019 Vas Vasiliadis
+# Copyright (C) 2011-2025 Vas Vasiliadis
 # University of Chicago
 #
 # Wrapper script for running AnnTools
@@ -29,11 +29,13 @@ class Timer(object):
       print(f"Approximate runtime: {self.secs:.2f} seconds")
 
 if __name__ == '__main__':
-	# Call the AnnTools pipeline
-	if len(sys.argv) > 1:
-		with Timer():
-			driver.run(sys.argv[1], 'vcf')
-	else:
-		print("A valid .vcf file must be provided as input to this program.")
+  # Call the AnnTools pipeline
+  if len(sys.argv) > 1:
+    with Timer():
+      # Note: this is not at all robust and subject to manipulation
+      driver.run(sys.argv[1], 'vcf')
+  else:
+    # In a real application we would validate the input more stringently
+    print("A valid .vcf file must be provided as input to this program.")
 
 ### EOF
