@@ -15,6 +15,7 @@ log/
 *.iif
 *.pem
 ssl/
+grading/
 
 # C extensions
 *.so
