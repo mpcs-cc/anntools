@@ -122,7 +122,12 @@ def getSnpsFromDbSnp(vcf, format='vcf', tmpextin='', tmpextout='.1',
     inds = getFormatSpecificIndices(format=format)
 
     fh = open(vcf)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Failed to get Snps. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -206,6 +211,10 @@ def getBigRefGene(vcf, format='vcf', tmpextin='.1', tmpextout='.2', sep='\t'):
     fh = open(vcf)
 
     conn = u.db_connect()
+    if not conn:
+        print("Failed to get RefGene. Aborting.")
+        raise
+
     cursor = conn.cursor()
     vcf_linenum = 1
 
@@ -327,7 +336,12 @@ def getGenes(vcf, format='vcf', table='refGene', promoter_offset=500,
 
     inds = getFormatSpecificIndices(format=format)
     fh = open(vcf)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Failed to get lcoation in gene structures. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -526,7 +540,12 @@ def getExonsEtAl(vcf, format='vcf', table='refGene', promoter_offset=500,
 
     inds = getFormatSpecificIndices(format=format)
     fh = open(vcf)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Failed to get exons et al. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -732,7 +751,12 @@ def addOverlapWithTfbsConsSites(vcf, format='vcf', table='tfbsConsSites',
     line_count = 0
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with tfbsConsSites failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
 
     linenum = 1
@@ -821,7 +845,12 @@ def addOverlapWithGadAll(vcf, format='vcf', table='gadAll', tmpextin='',
     line_count = 0
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with GadAll table failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -897,7 +926,12 @@ def addOverlapWithGwasCatalog(vcf, format='vcf', table='gwasCatalog', \
     line_count = 0
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with gwasCatalog table failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -970,7 +1004,12 @@ def addOverlapWitHUGOGeneNomenclature(vcf, format='vcf', table='hugo',
     line_count = 0
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with HGNC table failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -1050,7 +1089,12 @@ def addOverlapWithGenomicSuperDups(vcf, format='vcf',
     line_count = 0
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with segdup regions genomicSuperDups failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -1131,7 +1175,12 @@ def addOverlapWithRefGene(vcf, format='vcf', table='refGene',
     endName = 'txEnd'
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with RefGene table failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -1211,7 +1260,12 @@ def addOverlapWithCytoband(vcf, format='vcf', table='cytoBand',
         endName = 'chromEnd'
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with Cytoband table failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -1283,7 +1337,12 @@ def addOverlapWithCnvDatabase(vcf, format='vcf', table='dgv_Cnv',
     line_count = 0
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with CNV tables failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 
@@ -1351,7 +1410,12 @@ def addOverlapWithMiRNA(vcf, format='vcf', table='targetScanS',
     line_count = 0
 
     inds = getFormatSpecificIndices(format=format)
+    
     conn = u.db_connect()
+    if not conn:
+        print("Overlap with targetScanS tables failed. Aborting.")
+        raise
+
     cursor = conn.cursor()
     linenum = 1
 

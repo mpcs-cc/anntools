@@ -40,13 +40,18 @@ def db_connect():
     database_name = 'annotator'
 
     # Return a connection to the database
-    return pymysql.connect(
-        host=rds_host,
-        port=mysql_port,
-        user=username,
-        passwd=password,
-        db=database_name)
-
+    try:
+        conn = pymysql.connect(
+            host=rds_host,
+            port=mysql_port,
+            user=username,
+            passwd=password,
+            db=database_name)
+    except pymysql.err.OperationalError as error:
+        print(f"Unable to connect to AnnTools database: {error}")
+        conn = None
+        
+    return conn
 
 """Column inices for pileup and VCF
 """
